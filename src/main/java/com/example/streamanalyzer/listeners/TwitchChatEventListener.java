@@ -1,5 +1,6 @@
 package com.example.streamanalyzer.listeners;
 
+import com.example.streamanalyzer.service.agregation.ChatAggregationService;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 public class TwitchChatEventListener {
 
     private final TwitchClient client;
+    private final ChatAggregationService chatAggregationService;
 
     /**
      * Прослушка события запуска приложения, для логирования чата у стримера
@@ -30,9 +32,10 @@ public class TwitchChatEventListener {
             String message = chatEvent.getMessage();
             long timestamp = System.currentTimeMillis();
 
+            chatAggregationService.onMessage(channel, message);
             log.info("[{} ms] #{} | {}: {}", timestamp, channel, username, message);
         });
 
-        client.getChat().joinChannel("rostikfacekid");
+        client.getChat().joinChannel("bratishkinoff");
     }
 }
